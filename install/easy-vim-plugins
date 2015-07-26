@@ -1,0 +1,140 @@
+#!/bin/bash
+
+welcome () 
+{
+echo "Welcome to Easy Vim Plugins Install";
+echo
+
+if [ `which git` ]; then
+echo "These plugins are going to be installed:";
+echo
+echo "   The NERD Tree - A tree explorer for vim";
+echo "   ctrlp.vim - Fuzzy file, buffer, mru, tag, etc finder.";
+echo "   surround.vim - quoting/parenthesizing made simple.";
+echo "   SuperTab - perform all your vim insert mode completions with Tab.";
+echo "   EasyMotion - Vim motions on speed!";
+echo
+
+else
+echo "Error: You need git installed in order to run this script. Install it and retry";
+exit
+fi
+}
+
+finish_script ()
+{
+    echo
+    echo "Done!!!"
+    echo
+}
+
+setup_dir ()
+{
+INSTALL_DIR=~/.vim/bundle
+
+if [ ! -d "$INSTALL_DIR" ]; then
+	echo
+	echo "Setting up directory for installation..."
+	mkdir -p ~/.vim/bundle
+fi
+}
+
+fetch_plugin ()
+{
+  BASE_DIR=~/.vim/bundle/
+  DIR=$BASE_DIR$1
+
+  if [ ! -d "$DIR" ]; then
+  echo "Downloading $1 ..."
+  git clone $2 $DIR
+  echo
+  else
+  echo "Skipping $1 ..."
+  fi
+}
+
+download_plugins ()
+{
+#
+# ctrlp
+#
+fetch_plugin "ctrlp.vim" "https://github.com/kien/ctrlp.vim.git"
+
+#
+# NERD tree
+#
+fetch_plugin "nerdtree" "https://github.com/scrooloose/nerdtree.git"
+
+#
+# surround.vim
+#
+fetch_plugin "surround.vim" "http://github.com/tpope/vim-surround.git"
+
+#
+# easy-motion
+#
+fetch_plugin "EasyMotion" "https://github.com/Lokaltog/vim-easymotion"
+
+#
+# openbrowser.vim
+#
+fetch_plugin "open-browser.vim" "https://github.com/tyru/open-browser.vim"
+
+#
+# SuperTab
+#
+fetch_plugin "SuperTab" "https://github.com/ervandew/supertab"
+
+
+#
+# vim-easy-align
+#
+fetch_plugin "vim-easy-align" "https://github.com/junegunn/vim-easy-align"
+
+#
+# speeddating.vim
+#
+fetch_plugin "speeddating.vim" "https://github.com/tpope/vim-speeddating"
+
+#
+# enabler
+#
+fetch_plugin "enabler" "https://github.com/vim-scripts/enabler"
+
+#
+# syntastic
+#
+fetch_plugin "syntastic" "https://github.com/scrooloose/syntastic"
+
+#
+# vim-javascript
+#
+fetch_origin "vim-javascript" "https://github.com/pangloss/vim-javascript"
+}
+
+
+setup_configurations ()
+{
+
+# show line numbers on startup
+add_config "set number"
+add_config "filetype plugin indent on"
+add_config "set tabstop=2"
+add_config "set shiftwidth=4"
+add_config "set expandtab"
+}
+
+add_config ()
+{
+  if [ ! -z "$1" ]; then
+    echo "$1" >> ~/.vimrc
+  fi
+}
+
+
+# startup 
+welcome
+setup_dir
+setup_configurations
+download_plugins
+finish_script
